@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}
+    Sold
+{% endblock %}
+
+{% block main %}
+<form action="/sell" method="post">
+    <p>You are about to sell your <span class="text-success">{{ symbol }}</span> Stock.</p>
+    <div class="mb-3">
+       
+        <input type="number" placeholder="Enter shares you want to sell"  class="form-control" id="shares" name="sellShares" required>
+    </div>
+    <button type="submit" class="btn btn-success">Sell</button>
+</form>
+
+{% endblock %}

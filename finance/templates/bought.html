@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Check Stock
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            current balance is {{balance}}
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Congratulations!</h5>
+                    <p class="card-text">You have successfully bought a quantity of {{ shares }} of {{ symbol }} stocks for ${{ price }}</p>
+
+                    <a href="/" class="btn btn-light">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home Page
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+  <h1 class="text-center"><span class="text-success">{{ name.title() }}</span>'s Stock Portfolio</h1>
+ 
+  <h2 class="text-center">Balance: <span class="text-success">${{ cash }}</span></h2>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Stock Symbol</th>
+          <th scope="col">Shares Owned</th>
+          <th scope="col">Share Price</th>
+          <th scope="col">Total Share Value</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Replace this with dynamic data from your backend -->
+        {% for entry in shares %}
+        <tr>
+          <td class="text-success">{{ entry }}</td>
+          <td class="text-success">{{ shares[entry] }}</td>
+          <td class="text-success">${{ shareprice[entry] }}</td>
+          <td class="text-success">${{ totalsharevalue[entry] }}</td>
+          <td>
+            <form action="/sell" method="GET">
+              <input type="hidden" name="symbol" value="{{ entry }}">
+              <button type="submit" class="btn btn-success">Sell</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h1 class="text-center">Quote Stock & Buy shares</h1>
+  <div class="alert alert-warning" role="alert">
+    example of stock symbols are 
+  :<br>
+    BTC, AAPL, GOOGL, AMZN, MSFT, FB, TSLA, NFLX, TWTR, BABA, & V
+    <br> (😉case insensitive😉)
+  </div>
+  <form class="mt-3 text-center" action="/quote" method="post">
+    <div class="mb-3 mx-auto" style="max-width: 300px;">
+      <input autocomplete="off" class="form-control" name="symbol" placeholder="Stock symbol" type="text">
+    </div>
+    <button class="btn btn-success" type="submit">Check Price</button>
+  </form>
+</div>
+
+   
+{% endblock %}

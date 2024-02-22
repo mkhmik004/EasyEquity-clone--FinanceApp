@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    history
+{% endblock %}
+
+{% block main %}
+<a href="/" type="button" class="btn btn-success">Back to Home</a>
+<div class="table-responsive">
+  <table class="table">
+      <thead>
+          <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+              <th scope="col">Stock symbol</th>
+              <th scope="col">Shares</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Transaction</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for i in history %}
+          <tr>
+              <td class="text-success">{{i["date"]}}</td>
+              <td class="text-success">{{i["time"]}}</td>
+              <td class="text-success">{{i["symbol"]}}</td>
+              <td class="text-success">{{i["shares"]}}</td>
+              <td class="text-success">{{i["amount"]}}</td>
+              <td class="text-success">{{i["transaction_type"]}}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
+
+
+
+{% endblock %}
