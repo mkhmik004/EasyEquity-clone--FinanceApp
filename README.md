@@ -1,6 +1,6 @@
 # Finance-application
  BetterFinance: Users trade stocks, manage funds, update login info. Real-time stock data from IEX API. Monitor portfolio, reset passwords.
- 
+![BetterFinance](BF.png)
 # BetterFinance Documentation
 
 BetterFinance is a robust web application designed to empower users with various financial activities. From trading stocks to managing funds, BetterFinance offers a comprehensive platform for financial management.
