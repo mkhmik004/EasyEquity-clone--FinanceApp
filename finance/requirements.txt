@@ -4,3 +4,6 @@ Flask-Session
 pytz
 requests
 datetime
+Flask==2.3.2
+Werkzeu==2.3.6
+

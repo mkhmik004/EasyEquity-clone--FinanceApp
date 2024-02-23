@@ -8,6 +8,7 @@ from helpers import apology, login_required, lookup, usd
 
 # Configure application
 app = Flask(__name__)
+app.debug = False
 
 # Custom filter
 app.jinja_env.filters["usd"] = usd
@@ -35,7 +36,7 @@ def after_request(response):
 @login_required
 def index():
     user_id = session.get("user_id")
-    cash=(db.execute("SELECT cash FROM users WHERE id=?",user_id))[0]["cash"]
+    cash=((db.execute("SELECT cash FROM users WHERE id=?",user_id))[0]["cash"])
     name=db.execute("SELECT username FROM users WHERE id=?",user_id)[0]["username"]
     stockOwnership=db.execute("SELECT DISTINCT symbol FROM transactions WHERE user_id=?",user_id)
     symbol=[]
@@ -56,16 +57,17 @@ def index():
             try:
                 price=(lookup(value))["price"]
                 lookup_dict[value]=(price)
-                totalsharevalue[value]=float(price)*float((shares[value]))
-                print(totalsharevalue)
+                totalsharevalue[value] = '{:.2f}'.format(float(price) * float(shares[value]))
+
+               
             except:
                 return apology("Appears there's no internet connection to fetch Stock prices")
-        return render_template("portfolio.html",cash=cash,name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
+        return render_template("portfolio.html",cash=(cash),name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
     else:
         totalsharevalue=[{'date': 'N/A', 'time': 'N/A', 'transaction_type': 'N/A', 'amount': 'N/A', 'symbol': 'N/A', 'shares': 'No Shares'}]
         lookup_dict="N/A"
         shares={}
-        return render_template("portfolio.html",cash=cash,name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
+        return render_template("portfolio.html",cash=(cash),name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
 
 
 
@@ -109,7 +111,7 @@ def buy():
                 flash("Stock not found/shares not greater than 0")
                 return redirect("/")
             else:
-                return render_template("bought.html",price=price,shares=shares,symbol=symbol,cash=cash,balance=balance)
+                return render_template("bought.html",price=price,shares=shares,symbol=symbol,cash=(cash),balance=balance)
 
 
 @app.route("/history")
@@ -130,7 +132,7 @@ def reset():
         print("ror",rows)
         if  request.form.get("currentPassword") and check_password_hash(rows[0]["hash"], request.form.get("currentPassword")):
             if request.form.get('newUsername') and request.form.get("newPassword"):
-                db.execute("UPDATE users SET username=?, hash=? WHERE id=?",request.form.get('newUsername'),request.form.get("newPassword"),session.get("user_id"))
+                db.execute("UPDATE users SET username=?, hash=? WHERE id=?",request.form.get('newUsername'),generate_password_hash(request.form.get("newPassword")),session.get("user_id"))
                 flash("Password & Username have been reset")
                 return redirect('/')
             elif request.form.get('newUsername'):
@@ -138,7 +140,7 @@ def reset():
                 flash("username has been reset")
                 return redirect("/")
             elif request.form.get('newPassword'):
-                db.execute("UPDATE users SET hash=? WHERE id=?",request.form.get("newPassword"),session.get("user_id"))
+                db.execute("UPDATE users SET hash=? WHERE id=?",generate_password_hash(request.form.get("newPassword")),session.get("user_id"))
                 flash("Password has been reset")
                 return redirect("/")
         else:
@@ -209,7 +211,7 @@ def quote():
             user_id = session.get("user_id")
             cash=(db.execute("SELECT cash FROM users WHERE id=?",user_id))[0]["cash"]
             stockDetails=lookup(symbol)
-            return render_template("quoted.html",stockprice=usd(stockDetails["price"]),stocksymbol=stockDetails["symbol"],cash=cash)
+            return render_template("quoted.html",stockprice=usd(stockDetails["price"]),stocksymbol=stockDetails["symbol"],cash=(cash))
         except:
             flash("appears there is no input or symbol not recognized")#flash and redirect to same page
             return redirect("/")
@@ -291,7 +293,7 @@ def deposit():
         return render_template("DepositWithdraw.html")
     elif request.method=="POST":
         user_id = session.get("user_id")
-        deposit=request.form.get("deposit")
+        deposit=(request.form.get("deposit"))
         cash=(db.execute("SELECT cash FROM users WHERE id=?",user_id))[0]["cash"]
         cash=float(cash)+float(deposit)
         if deposit.isnumeric():
@@ -300,7 +302,7 @@ def deposit():
             date= current_datetime.strftime("%Y-%m-%d")
             time = current_datetime.strftime("%H:%M:%S")
             db.execute("INSERT INTO transactions (user_id, date, time, transaction_type, amount,symbol,shares) VALUES (?,?,?,?,?,?,?)",user_id,date,time,"deposit",deposit,"N/A","N/A")
-            flash(f"Succesfully deposited ${deposit} into your account",deposit)
+            flash(f"Succesfully deposited ${deposit} into your account",'{:.2f}'.format(float(deposit)))
             return redirect("/")
         else:
             flash("sorry buddy, input must be number")
@@ -313,7 +315,7 @@ def deposit():
 def withdraw():
     if request.method=='POST':
         user_id = session.get("user_id")
-        withdrawal=request.form.get("withdrawal")
+        withdrawal=float(request.form.get("withdrawal"))
         cash=(db.execute("SELECT cash FROM users WHERE id=?",user_id))[0]["cash"]
         try:
             if float(cash)>=float(withdrawal):
@@ -323,7 +325,7 @@ def withdraw():
                 date= current_datetime.strftime("%Y-%m-%d")
                 time = current_datetime.strftime("%H:%M:%S")
                 db.execute("INSERT INTO transactions (user_id, date, time, transaction_type, amount,symbol,shares) VALUES (?,?,?,?,?,?,?)",user_id,date,time,"withdrawal",withdrawal,"N/A","N/A")
-                flash(f"${withdrawal} was successfully Withdrew",withdrawal)
+                flash(f"${withdrawal} was successfully Withdrew",'{:.2f}'.format(float(withdrawal)))
                 return redirect("/")
             else:
                 flash("transaction failed,your withdrawal amount exceeds available funds")
