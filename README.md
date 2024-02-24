@@ -1,6 +1,12 @@
 # Finance-application
  BetterFinance: Users trade stocks, manage funds, update login info. Real-time stock data from IEX API. Monitor portfolio, reset passwords.
  
+ # Test software here
+
+ [Demo Software](https://mkhmik004.pythonanywhere.com/)
+
+# Screenshot of software
+
 ![BetterFinance](BF.png)
 
 # BetterFinance Documentation
