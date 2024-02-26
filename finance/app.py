@@ -62,12 +62,12 @@ def index():
                
             except:
                 return apology("Appears there's no internet connection to fetch Stock prices")
-        return render_template("portfolio.html",cash=(cash),name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
+        return render_template("portfolio.html",cash=round(cash,2),name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
     else:
         totalsharevalue=[{'date': 'N/A', 'time': 'N/A', 'transaction_type': 'N/A', 'amount': 'N/A', 'symbol': 'N/A', 'shares': 'No Shares'}]
         lookup_dict="N/A"
         shares={}
-        return render_template("portfolio.html",cash=(cash),name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
+        return render_template("portfolio.html",cash=round(cash,2),name=name,shares=shares,shareprice=lookup_dict,totalsharevalue=totalsharevalue)
 
 
 
@@ -111,7 +111,7 @@ def buy():
                 flash("Stock not found/shares not greater than 0")
                 return redirect("/")
             else:
-                return render_template("bought.html",price=price,shares=shares,symbol=symbol,cash=(cash),balance=balance)
+                return render_template("bought.html",price=round(price,2),shares=round(shares,2),symbol=symbol,cash=round(cash,2),balance=round(balance,2))
 
 
 @app.route("/history")
@@ -211,7 +211,7 @@ def quote():
             user_id = session.get("user_id")
             cash=(db.execute("SELECT cash FROM users WHERE id=?",user_id))[0]["cash"]
             stockDetails=lookup(symbol)
-            return render_template("quoted.html",stockprice=usd(stockDetails["price"]),stocksymbol=stockDetails["symbol"],cash=(cash))
+            return render_template("quoted.html",stockprice=usd(stockDetails["price"]),stocksymbol=stockDetails["symbol"],cash=round(cash,2))
         except:
             flash("appears there is no input or symbol not recognized")#flash and redirect to same page
             return redirect("/")
