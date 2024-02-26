@@ -1,4 +1,4 @@
-import os
+import pytz
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -94,7 +94,8 @@ def buy():
                 user_id = session.get("user_id")
                 cash=(db.execute("SELECT cash FROM users WHERE id=?",user_id))[0]["cash"]
                 balance=cash-price
-                current_datetime = datetime.now()
+                current_datetimen = datetime.now()
+                current_datetime = current_datetimen.astimezone(pytz.timezone('Africa/Johannesburg'))
                 date= current_datetime.strftime("%Y-%m-%d")
                 time = current_datetime.strftime("%H:%M:%S")
                 
@@ -266,7 +267,8 @@ def sell():
                 stockdetails=lookup(symbol)
                 price=float(stockdetails["price"])*sellShares
                 balance=cash+price
-                current_datetime = datetime.now()
+                current_datetimen = datetime.now()
+                current_datetime = current_datetimen.astimezone(pytz.timezone('Africa/Johannesburg'))
                 date= current_datetime.strftime("%Y-%m-%d")
                 time = current_datetime.strftime("%H:%M:%S")
             except:
@@ -298,7 +300,8 @@ def deposit():
         cash=float(cash)+float(deposit)
         if deposit.isnumeric():
             db.execute("UPDATE users SET cash=? WHERE id=?",cash,user_id)
-            current_datetime = datetime.now()
+            current_datetimen = datetime.now()
+            current_datetime = current_datetimen.astimezone(pytz.timezone('Africa/Johannesburg'))
             date= current_datetime.strftime("%Y-%m-%d")
             time = current_datetime.strftime("%H:%M:%S")
             db.execute("INSERT INTO transactions (user_id, date, time, transaction_type, amount,symbol,shares) VALUES (?,?,?,?,?,?,?)",user_id,date,time,"deposit",deposit,"N/A","N/A")
@@ -321,7 +324,8 @@ def withdraw():
             if float(cash)>=float(withdrawal):
                 cash=float(cash)-float(withdrawal)
                 db.execute("UPDATE users SET cash=? WHERE id=?",cash,user_id)
-                current_datetime = datetime.now()
+                current_datetimen = datetime.now()
+                current_datetime = current_datetimen.astimezone(pytz.timezone('Africa/Johannesburg'))
                 date= current_datetime.strftime("%Y-%m-%d")
                 time = current_datetime.strftime("%H:%M:%S")
                 db.execute("INSERT INTO transactions (user_id, date, time, transaction_type, amount,symbol,shares) VALUES (?,?,?,?,?,?,?)",user_id,date,time,"withdrawal",withdrawal,"N/A","N/A")
