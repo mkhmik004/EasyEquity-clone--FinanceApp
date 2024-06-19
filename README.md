@@ -6,14 +6,13 @@
 
  [Demo Software Hosted @ pythonAnywhere](https://mkhmik004.pythonanywhere.com/)
 
+ or 
+
+ watch @ https://youtu.be/jXdBZutX_sc?si=zmvWf1Xr98DSe2XC
+
 # Screenshot of software
 
 ![BetterFinance](BF.png)
-
-# Video Embed
-
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/jXdBZutX_sc?si=YdrZSrhAYMa9lUcl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
 # BetterFinance Documentation
